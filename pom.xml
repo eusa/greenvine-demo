@@ -1,0 +1,65 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>org.eusa</groupId>
+  <artifactId>greenvine-demo</artifactId>
+  <packaging>jar</packaging>
+  <version>1.0-SNAPSHOT</version>
+  <name>greenvine-demo</name>
+  <url>http://maven.apache.org</url>
+  <build>
+		<plugins>
+
+			<plugin>
+				<groupId>net.sourceforge.greenvine</groupId>
+				<artifactId>greenvine-plugin</artifactId>
+				<version>0.5.1</version>
+				<configuration>
+				    <configDirectory>/src/main/greenvine</configDirectory>
+					<outputDirectory>target/generated-sources/greenvine</outputDirectory>
+		        </configuration>
+				<dependencies>
+				    
+					<!-- Generator templates -->
+					<dependency>
+						<groupId>net.sourceforge.greenvine</groupId>
+						<artifactId>generator-templates</artifactId>
+						<version>0.5.1</version>
+					</dependency>
+					
+				</dependencies>
+			</plugin>
+			
+			<plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>sql-maven-plugin</artifactId>
+                <version>1.3</version>
+                <dependencies>
+                    <dependency>
+                        <groupId>com.h2database</groupId>
+                        <artifactId>h2</artifactId>
+                        <version>1.2.136</version>
+                    </dependency>
+                </dependencies>
+                <configuration>
+                    <driver>org.h2.Driver</driver>
+                    <url>jdbc:h2:GREENVINE_SCHEDULE_DB</url>
+                    <username>secret</username>
+                    <password>squirrel</password>
+                    <srcFiles>
+                        <srcFile>src/main/greenvine/schedule_schema.sql</srcFile>
+                    </srcFiles>
+                    <onError>continue</onError>
+                </configuration>
+            </plugin>
+
+		</plugins>
+
+	</build>
+	<pluginRepositories>
+	    <pluginRepository>
+	        <id>eusa-repo</id>
+	        <url>https://github.com/eusa/maven/raw/master/repo/</url>
+	    </pluginRepository>
+	</pluginRepositories>
+</project>

@@ -1,0 +1,133 @@
+DROP ALL OBJECTS;
+
+create schema "SCHEDULE";
+
+create table "SCHEDULE"."EMPLOYEES" (
+	"NORMAL_HOURS" DECIMAL (4,1) NOT NULL,
+	"EMAIL" VARCHAR (255) NOT NULL,
+	"EMPLOYEE_ID" INTEGER NOT NULL,
+	"FIRST_NAME" VARCHAR (255) NOT NULL,
+	"LAST_NAME" VARCHAR (255) NOT NULL,
+	"USER_ID" INTEGER NOT NULL,
+	"NORMAL_HOURLY_COST" DECIMAL (19,4) NOT NULL,
+	"OVERTIME_HOURLY_COST" DECIMAL (19,4) NOT NULL
+);
+
+create table "SCHEDULE"."GROUPS" (
+	"GROUPNAME" VARCHAR (255) NOT NULL,
+	"GROUP_ID" INTEGER NOT NULL
+);
+
+create table "SCHEDULE"."GROUP_USERS" (
+	"GROUP_ID" INTEGER NOT NULL,
+	"USER_ID" INTEGER NOT NULL
+);
+
+create table "SCHEDULE"."USERS" (
+	"PASSWORD" VARCHAR (255) NOT NULL,
+	"USERNAME" VARCHAR (255) NOT NULL,
+	"USER_ID" INTEGER NOT NULL
+);
+
+create table "SCHEDULE"."PROJECTS" (
+	"NAME" VARCHAR (255) NOT NULL,
+	"PROJECT_GROUP_ID" INTEGER NOT NULL,
+	"PROJECT_ID" INTEGER NOT NULL
+);
+
+create table "SCHEDULE"."PROJECT_GROUPS" (
+	"NAME" VARCHAR (255) NOT NULL,
+	"PROJECT_GROUP_ID" INTEGER NOT NULL
+);
+
+create table "SCHEDULE"."BOOKINGS" (
+	"BOOKING_ID" INTEGER NOT NULL,
+	"DESCRIPTION" VARCHAR (255) NOT NULL,
+	"DAY_ID" INTEGER NOT NULL,
+	"PROJECT_ID" INTEGER NOT NULL,
+	"OWNER" INTEGER NOT NULL,
+	"HOURS" DECIMAL (4,1) NOT NULL
+);
+
+create table "SCHEDULE"."DAYS" (
+    "DAY_ID" INTEGER NOT NULL,
+	"DATE" DATE NOT NULL,
+	"EMPLOYEE_ID" INTEGER NOT NULL,
+	"NORMAL_HOURS" DECIMAL (4,1) NOT NULL,
+	"OVERTIME_HOURS" DECIMAL (4,1) NOT NULL,
+	"NORMAL_HOURLY_COST" DECIMAL (19,4) NOT NULL,
+	"OVERTIME_HOURLY_COST" DECIMAL (19,4) NOT NULL,
+);
+
+-- PRIMARY KEYS
+
+alter table "SCHEDULE"."EMPLOYEES"
+    add constraint "SCHEDULE"."PK_EMPLOYEES" primary key ("EMPLOYEE_ID");
+
+alter table "SCHEDULE"."GROUPS"
+    add constraint "SCHEDULE"."PK_GROUP" primary key ("GROUP_ID");
+
+alter table "SCHEDULE"."GROUP_USERS"
+    add constraint "SCHEDULE"."PK_GROUP_USERS" primary key ("GROUP_ID","USER_ID");
+
+alter table "SCHEDULE"."USERS"
+    add constraint "SCHEDULE"."PK_USERS" primary key ("USER_ID");
+    
+alter table "SCHEDULE"."PROJECT_GROUPS"
+    add constraint "SCHEDULE"."PK_PROJECT_GROUP" primary key ("PROJECT_GROUP_ID");
+
+alter table "SCHEDULE"."PROJECTS"
+    add constraint "SCHEDULE"."PK_PROJECT" primary key ("PROJECT_ID");
+
+alter table "SCHEDULE"."BOOKINGS"
+    add constraint "SCHEDULE"."PK_BOOKING" primary key ("BOOKING_ID");
+
+alter table "SCHEDULE"."DAYS"
+    add constraint "SCHEDULE"."PK_DAY" primary key ("DAY_ID");
+
+-- UNIQUE KEYS
+
+alter table "SCHEDULE"."EMPLOYEES"
+    add constraint "SCHEDULE"."UK_EMPLOYEES_EMAIL_UNIQUE" unique ("EMAIL");
+
+alter table "SCHEDULE"."EMPLOYEES"
+    add constraint "SCHEDULE"."UK_EMPLOYEES_USER_ID_UNIQUE" unique ("USER_ID");
+
+alter table "SCHEDULE"."GROUPS"
+    add constraint "SCHEDULE"."UK_GROUP_GROUPNAME_UNIQUE" unique ("GROUPNAME");
+
+alter table "SCHEDULE"."USERS"
+    add constraint "SCHEDULE"."UK_USERS_USERNAME_UNIQUE" unique ("USERNAME");
+    
+alter table "SCHEDULE"."PROJECT_GROUPS"
+    add constraint "SCHEDULE"."UK_PROJECT_GROUP_NAME_UNIQUE" unique ("NAME");
+
+alter table "SCHEDULE"."PROJECTS"
+    add constraint "SCHEDULE"."UK_PROJECT_PROJECT_GROUP_NAME_UNIQUE" unique ("PROJECT_GROUP_ID", "NAME");    
+
+alter table "SCHEDULE"."DAYS"
+    add constraint "SCHEDULE"."UK_DAY_DATE_EMPLOYEES_UNIQUE" unique ("EMPLOYEE_ID", "DATE");     
+
+-- FOREIGN KEYS
+
+alter table "SCHEDULE"."EMPLOYEES"
+    add constraint "SCHEDULE"."EMPLOYEES_USERS" foreign key ("USER_ID") references "SCHEDULE"."USERS"("USER_ID");
+
+alter table "SCHEDULE"."GROUP_USERS"
+    add constraint "SCHEDULE"."GROUP_USERS_GROUP" foreign key ("GROUP_ID") references "SCHEDULE"."GROUPS"("GROUP_ID");
+
+alter table "SCHEDULE"."GROUP_USERS"
+    add constraint "SCHEDULE"."GROUP_USERS_USERS" foreign key ("USER_ID") references "SCHEDULE"."USERS"("USER_ID");
+
+alter table "SCHEDULE"."PROJECTS"
+    add constraint "SCHEDULE"."PROJECT_PROJECT_GROUP" foreign key ("PROJECT_GROUP_ID") references "SCHEDULE"."PROJECT_GROUPS"("PROJECT_GROUP_ID");
+
+alter table "SCHEDULE"."DAYS"
+    add constraint "SCHEDULE"."DAY_EMPLOYEES" foreign key ("EMPLOYEE_ID") references "SCHEDULE"."EMPLOYEES"("EMPLOYEE_ID");
+
+alter table "SCHEDULE"."BOOKINGS"
+    add constraint "SCHEDULE"."BOOKING_DAY" foreign key ("DAY_ID") references "SCHEDULE"."DAYS"("DAY_ID");
+
+alter table "SCHEDULE"."BOOKINGS"
+    add constraint "SCHEDULE"."BOOKING_PROJECT" foreign key ("PROJECT_ID") references "SCHEDULE"."PROJECTS"("PROJECT_ID");
+
