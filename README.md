@@ -7,18 +7,18 @@ Download or clone this project and then modify it to point to the database you w
 
 Quickstart
 ----------
-1) Clone or download the zip of this project and expand somewhere.
-2) Open a terminal and cd to the directory of the downloaded/expanded template project folder.
-3) Have a look at the demo database in your preferred text editor. It's located in:
+1. Clone or download the zip of this project and expand somewhere.
+2. Open a terminal and cd to the directory of the downloaded/expanded template project folder.
+3. Have a look at the demo database in your preferred text editor. It's located in:
     src/main/greenvine/schedule_schema.sql
-4) Use the SQL Maven Plugin to build the demo database, which is a H2 in memory database. To do this, simply type:
+4. Use the SQL Maven Plugin to build the demo database, which is a H2 in memory database. To do this, simply type:
     mvn sql:execute
-5) Now you are ready to test Greenvine. To reverse engineer the database you created and generate code type:
+5. Now you are ready to test Greenvine. To reverse engineer the database you created and generate code type:
     mvn greenvine:revgen
-6) Watch the terminal for output. When it's finished, change directory to the generated source to see what was output.
+6. Watch the terminal for output. When it's finished, change directory to the generated source to see what was output.
    cd target/generated-sources/greenvine
-7) You should see a full Maven project with main and test classes for JPA and Hibernate based on the demo schema.
-8) To build and run the tests of the demo project, type:
+7. You should see a full Maven project with main and test classes for JPA and Hibernate based on the demo schema.
+8. To build and run the tests of the demo project, type:
    mvn test
 
 Getting Started
